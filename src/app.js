@@ -23,4 +23,4 @@ getContact(1).then((contact) => {
 
 getContact(2).then((contact) => {
     console.log("Contact: ", JSON.stringify(contact))
-})
+})  
