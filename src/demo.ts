@@ -254,18 +254,27 @@ interface Contact8{
     name: string;
     status : ContactStatus8;
     address: Address8;
+    email: string;
 }
 
-interface Query {
+interface Query <TProp>{
     sort ?: 'asc' | 'desc';
-    matches(val) : boolean;
+    matches(val: TProp) : boolean;
 }
 
-function searchContacts(contacts: Contact8[], query: Record<keyof Contact8, Query>){
+//type ContactQuery = Omit<Partial<Record<keyof Contact8, Query>>,"address" | "status"> //Omit type to exclude the "address" and "status" properties from the ContactQuery type
+//type ContactQuery = Partial<Pick<Record<keyof Contact8, Query>,"id" | "name">> //Pick type to include only the "id" and "name" properties from the Contact8 type
+
+type ContactQuery = {
+    [TProp in keyof Contact8] ?: Query<Contact8[TProp]> // Mapped type to create a new type with the same properties as Contact8 but with the values of type Query<Contact8[TProp]>
+}
+type RequiredContactQuery = Required<ContactQuery> //Required type to make all properties of the ContactQuery type required
+
+function searchContacts(contacts: Contact8[], query: ContactQuery){
     return contacts.filter(contact => {
         for (const property of Object.keys(contact) as (keyof Contact8)[]){
             //get the query object for this property
-            const propertyQuery = query[property];
+            const propertyQuery = query[property] as Query<Contact8[keyof Contact8]>;
             //check to see if it matches
             if(propertyQuery && propertyQuery.matches(contact[property])){
                 return true;
@@ -275,13 +284,14 @@ function searchContacts(contacts: Contact8[], query: Record<keyof Contact8, Quer
     })
 }
 
-const filteredContacts = search ContactStatus(
+const filteredContacts = searchContacts(
     [],
     {
     id: {matches: (id) => id === 123},
     name: {matches : (name) => name === "Carol Waever"},
     }
 );
+
 
 
 //resource management with the "using" statement
