@@ -20,7 +20,7 @@ const todoItems : TodoItem[] = [
     {id: 3, title: "Write the best app in the world", status: Status.todo},
 ]
 
-function addTodoItem<T extends string>(todo: T) : TodoItem{
+function addTodoItem(todo: string) : TodoItem{
     const id = getNextId(todoItems)
     console.log(id);
     const newTodo : TodoItem = {
@@ -34,7 +34,7 @@ function addTodoItem<T extends string>(todo: T) : TodoItem{
     return newTodo
 }
 
-function getNextId(items : TodoItem[]) : number {
+function getNextId<T extends { id: number }>(items : T[]) : number {
     return items.reduce((max,x) => x.id > max ? x.id : max, 0) + 1
 }
 
