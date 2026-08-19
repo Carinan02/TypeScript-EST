@@ -5,7 +5,9 @@
         "outDir": "build",
         "target": "esnext",
         "noEmit": true,
-        "types": ["jquery"]
+        "types": ["jquery"],
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
     },
     "include": ["src/**/*", "01_challenge"]
 }

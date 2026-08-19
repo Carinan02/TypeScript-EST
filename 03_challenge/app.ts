@@ -2,7 +2,7 @@
 function query<T extends Record<string, any>>(
     items: T[],
     query: {
-        [K in keyof T]?: (value: T[K]) => boolean
+        [K in keyof T]?: (val: T[K]) => boolean
     }
 ){
     return items.filter(item => {
@@ -18,7 +18,7 @@ function query<T extends Record<string, any>>(
             }
         }
 
-        // nothing matched so return false
+        // nothing matched so return false 
         return false
     })
 }
